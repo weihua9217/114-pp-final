@@ -86,7 +86,6 @@ class CustomSoftmax(nn.Module):
 
 
 def patch_vit_attention(model):
-    
     if not CUDA_AVAILABLE:
         print("[WARNING] CUDA kernel not available, model unchanged")
         return model

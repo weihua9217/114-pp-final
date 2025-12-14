@@ -1,6 +1,5 @@
 """
 ViT Inference with Custom CUDA Softmax Kernel
-使用自定義 CUDA kernel 的 ViT 推論腳本
 """
 import sys
 import os
@@ -18,7 +17,6 @@ import time
 from custom_softmax import custom_softmax, CustomSoftmax, CUDA_AVAILABLE
 
 class CustomAttention(nn.Module):
-    """使用自定義 CUDA softmax 的 Attention"""
     def __init__(self, dim, heads=8, dim_head=64, dropout=0.0):
         super().__init__()
         inner_dim = dim_head * heads
@@ -110,7 +108,6 @@ class CustomViT(nn.Module):
         self.patch_size = patch_size
         self.dim = dim
 
-        # Patch embedding
         self.patch_embedding = nn.Sequential(
             nn.Conv2d(channels, dim, kernel_size=patch_size, stride=patch_size),
         )
@@ -209,7 +206,6 @@ def main():
         pin_memory=True
     )
 
-    # ========== Warmup ==========
     print("Warming up...")
     dummy_input = torch.randn(1, 3, 224, 224).to(device)
     with torch.no_grad():
