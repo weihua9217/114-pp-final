@@ -40,7 +40,7 @@ def main():
     ])
 
     test_dataset = datasets.CIFAR10(
-        root='./data',
+        root='../data',
         train=False,
         download=True,
         transform=transform
