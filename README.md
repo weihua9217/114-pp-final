@@ -46,9 +46,27 @@ All custom kernels show O(N²) scaling as expected for self-attention:
 #### Scalability (Log Scale, with v0)
 ![Scalability Plot Log Scale with v0](results/scalability/scalability_plot_log_with_v0.png)
 
-### Roofline Model Analysis (512×512)
+<!-- ### Roofline Model Analysis (512×512)
 
-![Roofline Model](results/scalability/roofline_512.png)
+![Roofline Model](results/scalability/roofline_512.png) -->
+
+### SA Kernel Performance Analysis (Nsight Compute)
+
+| Version | Grid | Block | Memory Throughput | SM Throughput | Occupancy | Register Limit | Shared Mem Limit |
+|---------|------|-------|-------------------|---------------|-----------|----------------|------------------|
+| v0 | (1,12,197) | 256 | 64.89% | 64.89% | 27.65% | 6 | 16 |
+| v1 | (12,197,1) | 64 | 61.16% | 61.16% | 19.49% | 24 | 5 |
+| v2 | (12,25,1) | 32 | 8.19% | 8.19% | 3.66% | 28 | 5 |
+| v3 | (12,13,1) | 32 | 5.74% | 2.76% | 2.07% | 16 | 5 |
+| v4 | (12,4,1) | 128 | 3.05% | 3.03% | 8.32% | 4 | 2 |
+| v5 | (12,2,1) | 256 | 2.28% | 2.86% | 16.73% | 2 | 2 |
+| v6 | (12,2,1) | 256 | 2.00% | 3.00% | 16.59% | 2 | 2 |
+
+**Key Observations:**
+- **v0/v1 (Memory Bound)**: Memory throughput ~61-65%, indicating heavy global memory access
+- **v2+ (Reduced Memory Traffic)**: Shared memory optimization reduced memory throughput to 2-8%
+- **v4-v6 (Improved Occupancy)**: Increasing warps/block (1→4→8) improved occupancy from 3.66% to 16.7%
+- **Resource Bottleneck**: v4-v6 are limited by shared memory (2 blocks/SM max)
 
 ## Project Structure
 
